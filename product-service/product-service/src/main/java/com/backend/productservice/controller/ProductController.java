@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +44,7 @@ public class ProductController {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<CustomResponseMs<ProductResponseModel>> createProduct(@RequestBody CreateProductModel product) {
+    public ResponseEntity<CustomResponseMs<ProductResponseModel>> createProduct(@RequestBody @Valid  CreateProductModel product) {
         try {
             ProductResponseModel productResponseModel = this.productService.createProduct(product);
             return ResponseEntity.ok(
@@ -127,10 +129,40 @@ public class ProductController {
      * @description Method to get a product paginated list
      * @autor Sebastian Rios
      */
-    @GetMapping()
-    public ResponseEntity<?> getAllProducts(@RequestParam Integer page, @RequestParam Integer size) {
-        return ResponseEntity.ok(productService.getAllProducts(page, size));
+    @GetMapping
+    public ResponseEntity<CustomResponseMs<Page<ProductResponseModel>>> getAllProducts(
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        try {
+            Page<ProductResponseModel> products = productService.getAllProducts(page, size);
+
+            return ResponseEntity.ok(
+                    CustomResponseMs.<Page<ProductResponseModel>>builder()
+                            .body(products)
+                            .responseMessage(new ResponseMessage(
+                                    "200",
+                                    "Consulta exitosa",
+                                    "Listado de productos"
+                            ))
+                            .build()
+            );
+        } catch (CustomException e) {
+
+            HttpStatus status = e.getCode().equals("404") ? HttpStatus.NOT_FOUND : HttpStatus.INTERNAL_SERVER_ERROR;
+            return ResponseEntity
+                    .status(status)
+                    .body(CustomResponseMs.<Page<ProductResponseModel>>builder()
+                            .responseMessage(new ResponseMessage(
+                                    e.getCode(),
+                                    e.getDescription(),
+                                    e.getMessage()
+                            ))
+                            .build()
+                    );
+        }
     }
+
 
     /**
      * @param productId {{@link Integer}}

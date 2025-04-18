@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class ProductService implements iProductService {
@@ -116,8 +115,18 @@ public class ProductService implements iProductService {
      * @description Method to get a product paginated list
      * @autor Sebastian Rios
      */
-    public Page<Product> getAllProducts(Integer page, Integer size) {
-        return this.productRepository.findAll(PageRequest.of(page, size));
+    public Page<ProductResponseModel> getAllProducts(Integer page, Integer size) throws CustomException {
+        try {
+            Page<Product> productsPage = this.productRepository.findAll(PageRequest.of(page, size));
+
+            return productsPage.map(this::mapProductEntityToProductResponseModel);
+        } catch (Exception e) {
+            throw new CustomException(
+                    "500",
+                    "Ocurrió un error al intentar obtener los productos paginados",
+                    e.getMessage()
+            );
+        }
     }
 
     /**
