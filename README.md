@@ -9,10 +9,10 @@ Este proyecto contiene dos microservicios independientes desarrollados con **Spr
 
 ```
 productsInventory/
-- product-service/product-service        * Servicio de gestión de productos
-- inventory-service/inventory-service      * Servicio de gestión de inventarios
-- docker-compose.yml      * Orquestación de los contenedores
-- README.md               * Documentación del proyecto
+- product-service/product-service-----------------> Servicio de gestión de productos
+- inventory-service/inventory-service-------------> Servicio de gestión de inventarios
+- docker-compose.yml------------------------------> Orquestación de los contenedores
+- README.md --------------------------------------> Documentación del proyecto
 ```
 
 ---
