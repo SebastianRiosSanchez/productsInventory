@@ -22,7 +22,7 @@ productsInventory/
 
 | Servicio          | Puerto | Descripción                                  |
 |------------------|--------|----------------------------------------------|
-| `product-service` | `8081` | CRUD de productos con documentación Swagger |
+| `product-service` | `8081` | CRUD de productos. |
 | `inventory-service` | `8082` | Consulta y actualización de inventario      |
 
 ---
