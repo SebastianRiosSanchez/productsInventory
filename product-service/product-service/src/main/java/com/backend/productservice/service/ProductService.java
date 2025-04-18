@@ -1,7 +1,12 @@
 package com.backend.productservice.service;
 
+import com.backend.productservice.application.CreateProductModel;
+import com.backend.productservice.application.CustomException;
+import com.backend.productservice.application.ProductResponseModel;
 import com.backend.productservice.entity.Product;
 import com.backend.productservice.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,8 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ProductService {
+public class ProductService implements iProductService {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
     @Autowired
     private ProductRepository productRepository;
 
@@ -22,8 +28,42 @@ public class ProductService {
      * @description Method to create a new product
      * @autor Sebastian Rios
      */
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    @Override
+    public ProductResponseModel createProduct(CreateProductModel product) throws CustomException {
+        try {
+            Product savedProduct = this.productRepository.save(mapProductModelToProductEntity(product));
+            return mapProductEntityToProductResponseModel(savedProduct);
+        } catch (Exception exception) {
+            CustomException newException = new CustomException(
+                    "500",
+                    exception.getMessage(),
+                    exception.getMessage()
+            );
+            log.error(exception.getMessage());
+            throw exception;
+        }
+    }
+
+    private Product mapProductModelToProductEntity(CreateProductModel productModel) {
+        Product productEntity = new Product();
+        productEntity.setProductName(productModel.getProductName());
+        productEntity.setProductPrice(productModel.getProductPrice());
+        productEntity.setIsEnable(productModel.getIsEnable());
+        productEntity.setIsDelete(productModel.getIsDelete());
+
+        return productEntity;
+
+    }
+
+    private ProductResponseModel mapProductEntityToProductResponseModel(Product product) {
+        ProductResponseModel responseModel = new ProductResponseModel();
+        responseModel.setProductName(product.getProductName());
+        responseModel.setProductPrice(product.getProductPrice());
+        responseModel.setIsDelete(product.getIsDelete());
+        responseModel.setIsEnable(product.getIsEnable());
+
+        return responseModel;
+
     }
 
     /**
@@ -75,5 +115,6 @@ public class ProductService {
     public void deleteProduct(Integer productId) {
         this.productRepository.deleteById(productId);
     }
+
 
 }
