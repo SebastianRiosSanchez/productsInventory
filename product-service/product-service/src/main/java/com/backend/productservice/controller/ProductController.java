@@ -87,9 +87,37 @@ public class ProductController {
             )
     })
     @GetMapping("/{productId}")
-    public ResponseEntity<?> getById(@PathVariable Integer productId) {
-        return ResponseEntity.ok(productService.getById(productId));
+    public ResponseEntity<CustomResponseMs<ProductResponseModel>> getById(@PathVariable Integer productId) {
+        try {
+            ProductResponseModel product = productService.getById(productId);
+
+            return ResponseEntity.ok(
+                    CustomResponseMs.<ProductResponseModel>builder()
+                            .body(product)
+                            .responseMessage(new ResponseMessage(
+                                    "200",
+                                    "Consulta exitosa",
+                                    "Producto encontrado"
+                            ))
+                            .build()
+            );
+        } catch (CustomException e) {
+            HttpStatus status = e.getCode().equals("404") ? HttpStatus.NOT_FOUND : HttpStatus.INTERNAL_SERVER_ERROR;
+
+            return ResponseEntity
+                    .status(status)
+                    .body(CustomResponseMs.<ProductResponseModel>builder()
+                            .responseMessage(new ResponseMessage(
+                                    e.getCode(),
+                                    e.getDescription(),
+                                    e.getMessage()
+
+                            ))
+                            .build()
+                    );
+        }
     }
+
 
     /**
      * @param page {{@link Integer}}

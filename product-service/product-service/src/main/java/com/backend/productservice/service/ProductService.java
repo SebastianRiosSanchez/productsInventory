@@ -87,8 +87,25 @@ public class ProductService implements iProductService {
      * @description Method to get a product record by id
      * @autor Sebastian Rios
      */
-    public Optional<Product> getById(Integer productId) {
-        return this.productRepository.findById(productId);
+    @Override
+    public ProductResponseModel getById(Integer productId) throws CustomException {
+        try {
+            return this.productRepository.findById(productId)
+                    .map(this::mapProductEntityToProductResponseModel)
+                    .orElseThrow(() -> new CustomException(
+                            "404",
+                            "Producto no encontrado",
+                            "No se ha encontrado un producto asociado al id: " + productId
+                    ));
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException(
+                    "500",
+                    "Error interno del servidor",
+                    "Ocurrió un error inesperado al consultar el producto: " + e.getMessage()
+            );
+        }
     }
 
     /**
