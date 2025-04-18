@@ -168,8 +168,20 @@ public class ProductService implements iProductService {
      * @description Method to delete a product record
      * @autor Sebastian Rios
      */
-    public void deleteProduct(Integer productId) {
-        this.productRepository.deleteById(productId);
+    public void deleteProduct(Integer productId) throws CustomException {
+        try {
+            Product product = this.productRepository.findById(productId)
+                    .orElseThrow(() -> new CustomException(
+                            "404",
+                            "No se encontró el producto con ID: " + productId,
+                            "No se encontró el producto con ID: " + productId
+                    ));
+            this.productRepository.delete(product);
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException("500", "Error interno al eliminar el producto", e.getMessage());
+        }
     }
 
 
