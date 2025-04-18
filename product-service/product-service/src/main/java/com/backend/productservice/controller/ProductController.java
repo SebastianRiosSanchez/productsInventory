@@ -44,7 +44,7 @@ public class ProductController {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<CustomResponseMs<ProductResponseModel>> createProduct(@RequestBody @Valid  CreateProductModel product) {
+    public ResponseEntity<CustomResponseMs<ProductResponseModel>> createProduct(@RequestBody @Valid CreateProductModel product) {
         try {
             ProductResponseModel productResponseModel = this.productService.createProduct(product);
             return ResponseEntity.ok(
@@ -173,8 +173,32 @@ public class ProductController {
      * @autor Sebastian Rios
      */
     @PutMapping("/{productId}")
-    public ResponseEntity<?> updateProduct(@PathVariable Integer productId, @RequestBody Product product) {
-        return ResponseEntity.ok(productService.updateProduct(productId, product));
+    public ResponseEntity<CustomResponseMs<ProductResponseModel>> updateProduct(
+            @PathVariable Integer productId,
+            @RequestBody UpdateProductModel product
+    ) {
+        try {
+            ProductResponseModel updated = this.productService.updateProduct(productId, product);
+            return ResponseEntity.ok(
+                    CustomResponseMs.<ProductResponseModel>builder()
+                            .body(updated)
+                            .responseMessage(new ResponseMessage(
+                                    "Producto actualizado",
+                                    "El producto se actualizó exitosamente",
+                                    "200"
+                            ))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(CustomResponseMs.<ProductResponseModel>builder()
+                            .responseMessage(new ResponseMessage(
+                                    "Error al actualizar",
+                                    e.getMessage(),
+                                    e.getCode()))
+                            .build());
+        }
     }
 
     /**

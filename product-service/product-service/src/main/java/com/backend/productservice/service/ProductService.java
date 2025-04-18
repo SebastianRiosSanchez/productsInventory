@@ -3,6 +3,7 @@ package com.backend.productservice.service;
 import com.backend.productservice.application.CreateProductModel;
 import com.backend.productservice.application.CustomException;
 import com.backend.productservice.application.ProductResponseModel;
+import com.backend.productservice.application.UpdateProductModel;
 import com.backend.productservice.entity.Product;
 import com.backend.productservice.repository.ProductRepository;
 import org.slf4j.Logger;
@@ -137,13 +138,28 @@ public class ProductService implements iProductService {
      * @description Method to update a product record
      * @autor Sebastian Rios
      */
-    public Product updateProduct(Integer productId, Product updatedProduct) {
-        Product foundProduct = this.productRepository.findById(productId).orElseThrow();
-        foundProduct.setProductName(updatedProduct.getProductName());
-        foundProduct.setProductPrice(updatedProduct.getProductPrice());
+    public ProductResponseModel updateProduct(Integer productId, UpdateProductModel updatedProduct) throws CustomException {
+        try {
+            Product foundProduct = this.productRepository.findById(productId)
+                    .orElseThrow(() -> new CustomException(
+                            "404",
+                            "No se encontró un producto con ID: " + productId,
+                            "No se encontró un producto con ID: " + productId
+                    ));
 
-        return this.productRepository.save(foundProduct);
+            foundProduct.setProductName(updatedProduct.getProductName());
+            foundProduct.setProductPrice(updatedProduct.getProductPrice());
+            foundProduct.setIsDelete(updatedProduct.getIsDelete());
+            foundProduct.setIsEnable(updatedProduct.getIsEnable());
 
+            Product savedProduct = this.productRepository.save(foundProduct);
+            return this.mapProductEntityToProductResponseModel(savedProduct);
+
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomException("500", "Error al actualizar producto", e.getMessage());
+        }
     }
 
     /**
