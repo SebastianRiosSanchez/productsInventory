@@ -89,7 +89,7 @@ curl -X GET http://localhost:8082/inventories/1   -H "x-api-key: mi-api-key-secr
 
 ## ✨ Autor
 
-Desarrollado con 💚 por [Sebastián Ríos Sánchez](https://github.com/sebasr23)
+Desarrollado con todo el 💚 por [Sebastián Rios Sanchez](https://github.com/sebasr23)
 
 ---
 
