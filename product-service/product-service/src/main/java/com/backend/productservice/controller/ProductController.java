@@ -121,6 +121,20 @@ public class ProductController {
     }
 
 
+    @Operation(summary = "Get all product",
+            description = "Get a paginated product list")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Product list retrieved successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Product.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error obtain product list",
+                    content = @Content
+            )
+    })
     /**
      * @param page {{@link Integer}}
      * @param size {{@link Integer}}
@@ -163,7 +177,20 @@ public class ProductController {
         }
     }
 
-
+    @Operation(summary = "Update product record",
+            description = "Get a updated product by its id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Product updated successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Product.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error updated product",
+                    content = @Content
+            )
+    })
     /**
      * @param productId {{@link Integer}}
      * @param product   {{@link Product}}
@@ -201,6 +228,20 @@ public class ProductController {
         }
     }
 
+    @Operation(summary = "delete a product",
+            description = "Delete a product record by its id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Product deleted successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Product.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error deleted product",
+                    content = @Content
+            )
+    })
     /**
      * @param productId {{@link Integer}}
      * @nameMethod deleteProduct
@@ -208,9 +249,26 @@ public class ProductController {
      * @autor Sebastian Rios
      */
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) {
-        productService.deleteProduct(productId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<CustomResponseMs<Void>> deleteProduct(@PathVariable Integer productId) {
+        try {
+            productService.deleteProduct(productId);
+            return ResponseEntity.ok(
+                    CustomResponseMs.<Void>builder()
+                            .responseMessage(new ResponseMessage(
+                                    "Producto eliminado",
+                                    "El producto fue eliminado correctamente",
+                                    "200"
+                            ))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(CustomResponseMs.<Void>builder()
+                            .responseMessage(new ResponseMessage("Error", e.getMessage(), e.getCode()))
+                            .build()
+                    );
+        }
     }
 
 
