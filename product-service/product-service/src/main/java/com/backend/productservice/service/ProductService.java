@@ -40,10 +40,17 @@ public class ProductService implements iProductService {
                     exception.getMessage()
             );
             log.error(exception.getMessage());
-            throw exception;
+            throw newException;
         }
     }
 
+    /**
+     * @param productModel {{@link CreateProductModel}}
+     * @return Product
+     * @nameMethod mapProductModelToProductEntity
+     * @description Method to map a product model to product entity
+     * @autor Sebastian Rios
+     */
     private Product mapProductModelToProductEntity(CreateProductModel productModel) {
         Product productEntity = new Product();
         productEntity.setProductName(productModel.getProductName());
@@ -55,6 +62,13 @@ public class ProductService implements iProductService {
 
     }
 
+    /**
+     * @param product {{@link ProductService}}
+     * @return ProductResponseModel
+     * @nameMethod mapProductEntityToProductResponseModel
+     * @description Method to map a product entity to product response model
+     * @autor Sebastian Rios
+     */
     private ProductResponseModel mapProductEntityToProductResponseModel(Product product) {
         ProductResponseModel responseModel = new ProductResponseModel();
         responseModel.setProductName(product.getProductName());
