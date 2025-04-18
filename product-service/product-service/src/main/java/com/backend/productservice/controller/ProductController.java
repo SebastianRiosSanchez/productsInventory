@@ -1,5 +1,6 @@
 package com.backend.productservice.controller;
 
+import com.backend.productservice.application.*;
 import com.backend.productservice.entity.Product;
 import com.backend.productservice.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +42,30 @@ public class ProductController {
             )
     })
     @PostMapping("/create")
-    public ResponseEntity<?> createProduct(@RequestBody Product product) {
-        return ResponseEntity.ok(productService.createProduct(product));
+    public ResponseEntity<CustomResponseMs<ProductResponseModel>> createProduct(@RequestBody CreateProductModel product) {
+        try {
+            ProductResponseModel productResponseModel = this.productService.createProduct(product);
+            return ResponseEntity.ok(
+                    CustomResponseMs.<ProductResponseModel>builder()
+                            .body(productResponseModel)
+                            .responseMessage(
+                                    new ResponseMessage(
+                                            "Producto creado",
+                                            "El producto se ha creado exitosamente",
+                                            "201"
+                                    ))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(CustomResponseMs.<ProductResponseModel>builder()
+                            .responseMessage(new ResponseMessage("Error al crear", e.getMessage(), "400"))
+                            .build()
+                    );
+        }
     }
+
 
     /**
      * @param productId {{@link Integer}}
