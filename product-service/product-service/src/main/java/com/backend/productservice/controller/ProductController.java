@@ -26,7 +26,7 @@ public class ProductController {
 
     /**
      * @param product {{@link Product}}
-     * @return ResponseEntity<CustomResponseMs<ProductResponseModel>>
+     * @return ResponseEntity<CustomResponseMs < ProductResponseModel>>
      * @nameMethod createProduct
      * @description Method to create a new product
      * @autor Sebastian Rios
@@ -37,7 +37,7 @@ public class ProductController {
             @ApiResponse(
                     responseCode = "200", description = "Product created successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Product.class))),
+                            schema = @Schema(implementation = CreateProductModel.class))),
             @ApiResponse(
                     responseCode = "400", description = "Error creating Product",
                     content = @Content
