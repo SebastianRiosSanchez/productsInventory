@@ -26,7 +26,7 @@ public class ProductController {
 
     /**
      * @param product {{@link Product}}
-     * @return Product
+     * @return ResponseEntity<CustomResponseMs<ProductResponseModel>>
      * @nameMethod createProduct
      * @description Method to create a new product
      * @autor Sebastian Rios
@@ -71,7 +71,7 @@ public class ProductController {
 
     /**
      * @param productId {{@link Integer}}
-     * @return Optional<Product>
+     * @return ResponseEntity<CustomResponseMs < ProductResponseModel>>
      * @nameMethod getById
      * @description Method to get a product record by id
      * @autor Sebastian Rios
@@ -138,7 +138,7 @@ public class ProductController {
     /**
      * @param page {{@link Integer}}
      * @param size {{@link Integer}}
-     * @return Page<Product>
+     * @return ResponseEntity<CustomResponseMs < Page < ProductResponseModel>>>
      * @nameMethod getAllProducts
      * @description Method to get a product paginated list
      * @autor Sebastian Rios
@@ -194,7 +194,7 @@ public class ProductController {
     /**
      * @param productId {{@link Integer}}
      * @param product   {{@link Product}}
-     * @return Product
+     * @return ResponseEntity<CustomResponseMs < ProductResponseModel>>
      * @nameMethod updateProduct
      * @description Method to update a product record
      * @autor Sebastian Rios
