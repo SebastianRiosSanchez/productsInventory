@@ -1,7 +1,8 @@
 # 🛍️ Products & Inventory Microservices
 
-Este proyecto contiene dos microservicios independientes desarrollados con **Spring Boot**, comunicados mediante **REST API**, contenedorizados con **Docker**, y documentados con **Swagger (OpenAPI)**.  
-¡Perfecto para arquitecturas modernas y escalables! 💡
+Este proyecto contiene dos microservicios independientes desarrollados con **Spring Boot**, comunicados mediante **REST API**, contenedorizados con **Docker** Se ha documentado el servicio de producto unicamente con **Swagger (OpenAPI)**.Esto con el fin de ilustrar a aquellas personas que se adentran en el maravilloso mundo del desarrollo, más puntualmente el desarrollo del lado del backend 💡 
+¡Espero que pueda ser de ayuda para ti y tus sueños!. 🫡 
+Y como dijo uno de los grandes... 🕊️ 🥲 "_Si puedes imaginarlo, puedes programarlo_" 🚀🔥🚀🔥🚀🔥
 
 ---
 
