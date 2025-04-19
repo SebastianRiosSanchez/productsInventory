@@ -34,7 +34,7 @@ El `inventory-service` utiliza una **API Key** para autenticarse.
 |---------------|----------------------|
 | `x-api-key`   | `mi-api-key-secreta` |
 
-> **⚠️ Importante:** Swagger en el servicio de inventario requiere autenticación para acceder a los endpoints.
+> **⚠️ Importante:** Swagger en el servicio de inventario requiere autenticación para acceder a los endpoints. Por eso no olvides copiar la apikey 😉.
 
 ---
 
